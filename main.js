@@ -50,7 +50,7 @@ function hashdb(path)
       _db.get("select max(`version`) as version from updates", function(error, response)
       {
         if(error) {reject(error); return;}
-        if(!response) {resolve(0); return;}
+        if(!response.version) {resolve(0); return;}
         resolve(response.version);
       });
     });

@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 var sqlite3 = require("sqlite3").verbose();
 var crypto = require('crypto');
@@ -25,12 +25,12 @@ function hashdb(path)
 
   // Getters
 
-  var __path__ = this.path = function()
+  var __path__ = this.path = function() // jshint ignore: line
   {
     return _path;
-  }
+  };
 
-  var __root__ = this.root = function()
+  var __root__ = this.root = function() // jshint ignore: line
   {
     return new Promise(function(resolve, reject)
     {
@@ -41,9 +41,9 @@ function hashdb(path)
         resolve(response.merkle);
       });
     });
-  }
+  };
 
-  var __version__ = this.version = function()
+  var __version__ = this.version = function() // jshint ignore: line
   {
     return new Promise(function(resolve, reject)
     {
@@ -54,7 +54,7 @@ function hashdb(path)
         resolve(response.version);
       });
     });
-  }
+  };
 
   // Private methods
 
@@ -71,7 +71,7 @@ function hashdb(path)
     sha256.update(item.right_merkle);
 
     return sha256.digest("hex");
-  }
+  };
 
   var __update_merkle__ = function(idx)
   {
@@ -96,11 +96,11 @@ function hashdb(path)
         return __update_merkle__(Math.floor(idx / 2));
       });
     }
-  }
+  };
 
   // Methods
 
-  var __add__ = this.add = function(tag, digest)
+  var __add__ = this.add = function(tag, digest) //jshint ignore: line
   {
     var idx;
 
@@ -145,9 +145,9 @@ function hashdb(path)
       _db.run("rollback");
       return Promise.reject(error);
     });
-  }
+  };
 
-  var __remove__ = this.remove = function(tag)
+  var __remove__ = this.remove = function(tag) // jshint ignore: line
   {
     var remidx;
     var movidx;
@@ -172,7 +172,7 @@ function hashdb(path)
             {
               if(error) {reject(error); return;}
 
-              if(remidx != movidx)
+              if(remidx !== movidx)
               {
                 _db.run("update items set idx = ? where idx = ?", remidx, movidx, function(error)
                 {
@@ -192,7 +192,7 @@ function hashdb(path)
       return __update_merkle__(Math.floor(movidx / 2));
     }).then(function()
     {
-      if(remidx != movidx)
+      if(remidx !== movidx)
         return __update_merkle__(remidx);
     }).then(function()
     {
@@ -209,9 +209,9 @@ function hashdb(path)
       _db.run("rollback");
       return Promise.reject(error);
     });
-  }
+  };
 
-  var __prove__ = this.prove = function(tag)
+  var __prove__ = this.prove = function(tag) // jshint ignore: line
   {
     var proof = [];
 
@@ -238,7 +238,7 @@ function hashdb(path)
         __recursion__(response.idx);
       });
     });
-  }
+  };
 }
 
 function check(root, proof)
@@ -247,10 +247,10 @@ function check(root, proof)
 
   for(var i in proof)
   {
-    if(merkle && merkle != proof[i].left_merkle && merkle != proof[i].right_merkle)
+    if(merkle && merkle !== proof[i].left_merkle && merkle !== proof[i].right_merkle)
       return false;
 
-    merkle = __compute_merkle__(proof[i]);
+    merkle = __compute_merkle__(proof[i]); // jshint ignore:line
   }
 
   return root === merkle;
